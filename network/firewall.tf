@@ -1,77 +1,73 @@
-resource "azurerm_public_ip" "example" {
-  name                = "testpip"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+// FIREWALL PUBLIC IP
+resource "azurerm_public_ip" "afw" {
+  name                = var.firewall_public_ip_name
+  location            = var.location
+  resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
   sku                 = "Standard"
+
+  tags = var.tags
 }
 
-resource "azurerm_firewall" "example" {
-  name                = "testfirewall"
-  location            = azurerm_resource_group.example.location
-  resource_group_name = azurerm_resource_group.example.name
+// FIREWALL SUBNET
+resource "azurerm_subnet" "afw_subnet" {
+  name                 = "AzureFirewallSubnet"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = "vnet-aks-afw"
+  address_prefixes     = var.firewall_subnet_address_prefix
+
+  depends_on = [
+    azurerm_virtual_network.vnet, azurerm_resource_group.rg
+  ]
+}
+
+// FIREWALL
+resource "azurerm_firewall" "afw" {
+  name                = var.firewall_name
+  location            = var.location
+  resource_group_name = azurerm_resource_group.rg.name
+  sku_name            = var.firewall_sku_name
+  sku_tier            = var.firewall_sku_tier
+  firewall_policy_id  = azurerm_firewall_policy.afwp.id
+  threat_intel_mode   = var.firewall_threat_intel_mode
+  zones               = var.firewall_zones
 
   ip_configuration {
-    name                 = "configuration"
-    subnet_id            = azurerm_subnet.example.id
-    public_ip_address_id = azurerm_public_ip.example.id
+    name                 = "pipcfg-aks-afw"
+    subnet_id            = azurerm_subnet.afw_subnet.id
+    public_ip_address_id = azurerm_public_ip.afw.id
   }
+
+  tags = var.tags
 }
 
-resource "azurerm_firewall_policy" "example" {
-  name                = "example-policy"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
+// FIREWALL POLICY
+resource "azurerm_firewall_policy" "afwp" {
+  name                = var.firewall_policy_name
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = var.location
+
+  tags = var.tags
 }
 
-resource "azurerm_firewall_policy_rule_collection_group" "example" {
-  name               = "example-fwpolicy-rcg"
-  firewall_policy_id = azurerm_firewall_policy.example.id
-  priority           = 500
-  application_rule_collection {
-    name     = "app_rule_collection1"
-    priority = 500
-    action   = "Deny"
-    rule {
-      name = "app_rule_collection1_rule1"
-      protocols {
-        type = "Http"
-        port = 80
-      }
-      protocols {
-        type = "Https"
-        port = 443
-      }
-      source_addresses  = ["10.0.0.1"]
-      destination_fqdns = [".microsoft.com"]
-    }
-  }
 
-  network_rule_collection {
-    name     = "network_rule_collection1"
-    priority = 400
-    action   = "Deny"
-    rule {
-      name                  = "network_rule_collection1_rule1"
-      protocols             = ["TCP", "UDP"]
-      source_addresses      = ["10.0.0.1"]
-      destination_addresses = ["192.168.1.1", "192.168.1.2"]
-      destination_ports     = ["80", "1000-2000"]
-    }
-  }
+resource "azurerm_firewall_network_rule_collection" "afw_rc" {
+  for_each            = var.afw_network_rules
+  name                = each.key
+  azure_firewall_name = azurerm_firewall.afw.name
+  resource_group_name = azurerm_resource_group.rg.name
+  priority            = each.value.priority
+  action              = each.value.action
 
-  nat_rule_collection {
-    name     = "nat_rule_collection1"
-    priority = 300
-    action   = "Dnat"
-    rule {
-      name                = "nat_rule_collection1_rule1"
-      protocols           = ["TCP", "UDP"]
-      source_addresses    = ["10.0.0.1", "10.0.0.2"]
-      destination_address = "192.168.1.1"
-      destination_ports   = ["80", "1000-2000"]
-      translated_address  = "192.168.0.1"
-      translated_port     = "8080"
-    }
+  rule {
+    name = each.rule.value.name
+
+    source_addresses = each.rule.value.source_addresses
+
+    destination_ports = each.rule.value.destination_ports
+
+    destination_addresses = each.rule.value.destination_address
+
+    protocols = each.rule.value.protocols
   }
 }

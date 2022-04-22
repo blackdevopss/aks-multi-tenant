@@ -47,18 +47,6 @@ resource "azurerm_subnet" "subnet" {
   ]
 }
 
-// FIREWALL SUBNET
-resource "azurerm_subnet" "afw_subnet" {
-  name                 = "AzureFirewallSubnet"
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = "vnet-aks-afw"
-  address_prefixes     = var.firewall_subnet_address_prefix
-
-  depends_on = [
-    azurerm_virtual_network.vnet, azurerm_resource_group.rg
-  ]
-}
-
 // ROUTE TABLE
 resource "azurerm_route_table" "rtb" {
   for_each                      = var.subnets

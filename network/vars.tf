@@ -54,3 +54,45 @@ variable "network_security_group_rules" {
   }))
 
 }
+
+variable "firewall_name" {
+  type = string
+}
+
+variable "firewall_sku_name" {
+  type = string
+}
+
+variable "firewall_sku_tier" {
+  type = string
+}
+
+variable "firewall_threat_intel_mode" {
+  type = string
+}
+
+variable "firewall_zones" {
+  type = list(string)
+}
+
+variable "firewall_public_ip_name" {
+  type = string
+}
+
+variable "firewall_policy_name" {
+  type = string
+}
+
+variable "afw_network_rules" {
+  type = map(object({
+    priority = number
+    action   = string
+    rule = object({
+      name                  = string
+      source_addresses      = list(string)
+      destination_ports     = list(string)
+      destination_addresses = list(string)
+      protocols             = list(string)
+    })
+  }))
+}

@@ -1,6 +1,30 @@
 resource_group_name = "rg-aks-network"
 location            = "centralus"
 
+//FIREWALL
+firewall_name              = "afw-aks-shared"
+firewall_sku_name          = "AZFW_VNet"
+firewall_sku_tier          = "Premium"
+firewall_threat_intel_mode = "Alert"
+firewall_zones             = ["1", "2"]
+firewall_policy_name       = "afw-aks-policy-core"
+firewall_public_ip_name    = "pip-aks-afw"
+
+afw_network_rules = {
+
+  "RC-AKS-Network" = {
+    action   = "Allow"
+    priority = 500
+
+    rule = {
+      destination_addresses = ["*"]
+      destination_ports     = ["1194"]
+      name                  = "AllowNodesToControlPlaneEgress"
+      protocols             = ["UDP"]
+      source_addresses      = ["10.0.8.0/21"]
+    }
+  }
+}
 
 // VIRTUAL NETWORKS
 firewall_subnet_address_prefix = ["192.168.0.0/25"]
@@ -30,7 +54,7 @@ subnets = {
     enforce_private_link_service_network_policies  = true
     service_endpoints = ["Microsoft.Storage", "Microsoft.Sql", "Microsoft.ContainerRegistry",
       "Microsoft.AzureCosmosDB", "Microsoft.KeyVault", "Microsoft.ServiceBus", "Microsoft.EventHub",
-    "Microsoft.AzureActiveDirectory", "Microsoft.Web", "Microsoft.CognitiveServices"]
+    "Microsoft.AzureActiveDirectory", "Microsoft.Web"]
     virtual_network_name        = "vnet-aks-prd"
     network_security_group_name = "nsg-npool-snet"
     route_table_name            = "rtb-npool-snet"
@@ -42,7 +66,7 @@ subnets = {
     enforce_private_link_service_network_policies  = true
     service_endpoints = ["Microsoft.Storage", "Microsoft.Sql", "Microsoft.ContainerRegistry",
       "Microsoft.AzureCosmosDB", "Microsoft.KeyVault", "Microsoft.ServiceBus", "Microsoft.EventHub",
-    "Microsoft.AzureActiveDirectory", "Microsoft.Web", "Microsoft.CognitiveServices"]
+    "Microsoft.AzureActiveDirectory", "Microsoft.Web"]
     virtual_network_name        = "vnet-aks-prd"
     network_security_group_name = "nsg-mgmt-snet"
     route_table_name            = "rtb-mgmt-snet"
@@ -54,7 +78,7 @@ subnets = {
     enforce_private_link_service_network_policies  = true
     service_endpoints = ["Microsoft.Storage", "Microsoft.Sql", "Microsoft.ContainerRegistry",
       "Microsoft.AzureCosmosDB", "Microsoft.KeyVault", "Microsoft.ServiceBus", "Microsoft.EventHub",
-    "Microsoft.AzureActiveDirectory", "Microsoft.Web", "Microsoft.CognitiveServices"]
+    "Microsoft.AzureActiveDirectory", "Microsoft.Web"]
     virtual_network_name        = "vnet-aks-prd"
     network_security_group_name = "nsg-agw-snet"
     route_table_name            = "rtb-agw-snet"
