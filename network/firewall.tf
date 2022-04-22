@@ -5,6 +5,7 @@ resource "azurerm_public_ip" "afw" {
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
   sku                 = "Standard"
+  zones               = ["1"]
 
   tags = var.tags
 }
@@ -50,20 +51,3 @@ resource "azurerm_firewall_policy" "afwp" {
   tags = var.tags
 }
 
-
-resource "azurerm_firewall_network_rule_collection" "afw_rc" {
-  for_each            = var.afw_network_rules
-  name                = each.key
-  azure_firewall_name = azurerm_firewall.afw.name
-  resource_group_name = azurerm_resource_group.rg.name
-  priority            = each.value.priority
-  action              = each.value.action
-
-  rule {
-    name                  = each.value.rule.name
-    source_addresses      = each.value.rule.source_addresses
-    destination_ports     = each.value.rule.destination_ports
-    destination_addresses = each.value.rule.destination_addresses
-    protocols             = each.value.rule.protocols
-  }
-}

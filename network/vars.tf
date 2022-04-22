@@ -42,15 +42,15 @@ variable "firewall_subnet_address_prefix" {
 
 variable "network_security_group_rules" {
   type = map(object({
-    priority                     = string
-    direction                    = string
-    access                       = string
-    protocol                     = string
-    source_port_ranges           = list(string)
-    destination_port_ranges      = list(string)
-    source_address_prefix        = string
-    destination_address_prefixes = list(string)
-    network_security_group_name  = string
+    priority                    = string
+    direction                   = string
+    access                      = string
+    protocol                    = string
+    source_port_range           = string
+    destination_port_ranges     = list(string)
+    source_address_prefix       = string
+    destination_address_prefix  = string
+    network_security_group_name = string
   }))
 
 }
@@ -83,17 +83,3 @@ variable "firewall_policy_name" {
   type = string
 }
 
-variable "afw_network_rules" {
-  type = map(object({
-    priority = number
-    action   = string
-
-    rule = object({
-      name                  = string
-      source_addresses      = list(string)
-      destination_ports     = list(string)
-      destination_addresses = list(string)
-      protocols             = list(string)
-    })
-  }))
-}

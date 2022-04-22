@@ -6,25 +6,9 @@ firewall_name              = "afw-aks-shared"
 firewall_sku_name          = "AZFW_VNet"
 firewall_sku_tier          = "Premium"
 firewall_threat_intel_mode = "Alert"
-firewall_zones             = ["1", "2"]
-firewall_policy_name       = "afw-aks-policy-core"
+firewall_zones             = ["1"]
+firewall_policy_name       = "afw-policy-main"
 firewall_public_ip_name    = "pip-aks-afw"
-
-afw_network_rules = {
-
-  "RC-AKS-Network" = {
-    action   = "Allow"
-    priority = 500
-
-    rule = {
-      destination_addresses = ["*"]
-      destination_ports     = ["1194"]
-      name                  = "AllowNodesToControlPlaneEgress"
-      protocols             = ["UDP"]
-      source_addresses      = ["10.0.8.0/21"]
-    }
-  }
-}
 
 // VIRTUAL NETWORKS
 firewall_subnet_address_prefix = ["192.168.0.0/25"]
@@ -88,15 +72,15 @@ subnets = {
 network_security_group_rules = {
 
   "AllowGatewayManager" = {
-    access                       = "Allow"
-    destination_address_prefixes = ["*"]
-    destination_port_ranges      = ["65200-65535"]
-    direction                    = "Inbound"
-    network_security_group_name  = "nsg-agw-snet"
-    priority                     = "300"
-    protocol                     = "Tcp"
-    source_address_prefix        = "GatewayManager"
-    source_port_ranges           = ["*"]
+    access                      = "Allow"
+    destination_address_prefix  = "*"
+    destination_port_ranges     = ["65200-65535"]
+    direction                   = "Inbound"
+    network_security_group_name = "nsg-agw-snet"
+    priority                    = "300"
+    protocol                    = "Tcp"
+    source_address_prefix       = "GatewayManager"
+    source_port_range           = "*"
   }
 }
 
