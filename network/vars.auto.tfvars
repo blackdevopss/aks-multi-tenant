@@ -1,8 +1,10 @@
-resource_group_name            = "rg-aks-network"
-location                       = "centralus"
-firewall_subnet_address_prefix = ["192.168.0.0/25"]
+resource_group_name = "rg-aks-network"
+location            = "centralus"
+
 
 // VIRTUAL NETWORKS
+firewall_subnet_address_prefix = ["192.168.0.0/25"]
+
 virtual_networks = {
 
   "vnet-aks-prd" = {
@@ -61,15 +63,15 @@ subnets = {
 network_security_group_rules = {
 
   "AllowGatewayManager" = {
-    access                       = "value"
-    destination_address_prefixes = ["value"]
-    destination_port_ranges      = ["value"]
-    direction                    = "value"
-    network_security_group_name  = "value"
-    priority                     = "value"
-    protocol                     = "value"
-    source_address_prefix        = "value"
-    source_port_ranges           = ["value"]
+    access                       = "Allow"
+    destination_address_prefixes = ["*"]
+    destination_port_ranges      = ["65200-65535"]
+    direction                    = "Inbound"
+    network_security_group_name  = "nsg-agw-snet"
+    priority                     = "300"
+    protocol                     = "Tcp"
+    source_address_prefix        = "GatewayManager"
+    source_port_ranges           = ["*"]
   }
 }
 
