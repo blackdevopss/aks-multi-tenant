@@ -10,6 +10,10 @@ variable "tags" {
   type = map(string)
 }
 
+variable "nat_gateway_name" {
+  type = string
+}
+
 variable "virtual_networks" {
   type = map(object({
     address_space           = list(string)

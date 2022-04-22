@@ -1,23 +1,30 @@
 resource "azurerm_public_ip_prefix" "nat" {
-  name                = "nat-gateway-publicIPPrefix"
+  name                = "pip-ngw-aks-prd"
   location            = var.location
   resource_group_name = azurerm_resource_group.rg.name
-  prefix_length       = 30
+  prefix_length       = 28
   zones               = ["1"]
+
+  tags = var.tags
 }
 
 resource "azurerm_nat_gateway" "nat" {
-  name                    = "nat-Gateway"
-  location                = azurerm_resource_group.rg.location
-  resource_group_name     = azurerm_resource_group.example.name
-  public_ip_address_ids   = [azurerm_public_ip.example.id]
-  public_ip_prefix_ids    = [azurerm_public_ip_prefix.example.id]
+  name                = var.nat_gateway_name
+  location            = var.location
+  resource_group_name = azurerm_resource_group.rg.name
+  #  public_ip_address_ids   = [azurerm_public_ip.example.id]
+  public_ip_prefix_ids    = [azurerm_public_ip_prefix.nat.id]
   sku_name                = "Standard"
-  idle_timeout_in_minutes = 10
+  idle_timeout_in_minutes = 4
   zones                   = ["1"]
+
+
+  tags = var.tags
 }
 
 resource "azurerm_subnet_nat_gateway_association" "nat" {
-  subnet_id      = azurerm_subnet.example.id
+  for_each       = var.subnets
+  subnet_id      = azurerm_subnet.subnet[each.key].id
   nat_gateway_id = azurerm_nat_gateway.nat.id
 }
+

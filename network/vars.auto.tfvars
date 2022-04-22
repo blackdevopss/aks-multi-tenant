@@ -4,6 +4,7 @@ location            = "centralus"
 
 // VIRTUAL NETWORKS
 firewall_subnet_address_prefix = ["192.168.0.0/25"]
+nat_gateway_name               = "ngw-aksvnet-prd"
 
 virtual_networks = {
 
