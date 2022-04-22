@@ -87,6 +87,7 @@ variable "afw_network_rules" {
   type = map(object({
     priority = number
     action   = string
+
     rule = object({
       name                  = string
       source_addresses      = list(string)

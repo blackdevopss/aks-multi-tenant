@@ -60,14 +60,10 @@ resource "azurerm_firewall_network_rule_collection" "afw_rc" {
   action              = each.value.action
 
   rule {
-    name = each.rule.value.name
-
-    source_addresses = each.rule.value.source_addresses
-
-    destination_ports = each.rule.value.destination_ports
-
-    destination_addresses = each.rule.value.destination_address
-
-    protocols = each.rule.value.protocols
+    name                  = each.value.rule.name
+    source_addresses      = each.value.rule.source_addresses
+    destination_ports     = each.value.rule.destination_ports
+    destination_addresses = each.value.rule.destination_addresses
+    protocols             = each.value.rule.protocols
   }
 }
