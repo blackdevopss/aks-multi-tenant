@@ -1,4 +1,4 @@
-resource_group_name            = "rg-aks-core"
+resource_group_name            = "rg-aks-network"
 location                       = "centralus"
 firewall_subnet_address_prefix = ["192.168.0.0/25"]
 
