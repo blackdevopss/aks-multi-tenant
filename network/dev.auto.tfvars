@@ -1,8 +1,8 @@
-resource_group_name            = "rg-aks-network"
+resource_group_name            = "rg-aks-core"
 location                       = "centralus"
 firewall_subnet_address_prefix = ["192.168.0.0/25"]
 
-// VIRTUAL NETWORKS (VNETS)
+// VIRTUAL NETWORKS
 virtual_networks = {
 
   "vnet-aks-prd" = {
@@ -10,6 +10,7 @@ virtual_networks = {
     dns_servers             = ["168.63.129.16"]
     flow_timeout_in_minutes = 4
   }
+
   "vnet-aks-afw" = {
     address_space           = ["192.168.0.0/22"]
     dns_servers             = ["168.63.129.16"]
