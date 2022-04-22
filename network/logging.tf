@@ -24,13 +24,14 @@ resource "azurerm_network_watcher_flow_log" "nsg" {
 
 // VNET DIAGNOSTICS
 resource "azurerm_monitor_diagnostic_setting" "vnet" {
+  for_each           = var.virtual_networks
   name               = azurerm_virtual_network.vnet[each.key].name
   target_resource_id = azurerm_virtual_network.vnet[each.key].id
   storage_account_id = azurerm_storage_account.st_aks.id
 
   log {
-    category = "allLogs"
-    enabled  = false
+    category = "VMProtectionAlerts"
+    enabled  = true
 
     retention_policy {
       enabled = true
