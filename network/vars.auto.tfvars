@@ -58,6 +58,21 @@ subnets = {
   }
 }
 
+network_security_group_rules = {
+
+  "AllowGatewayManager" = {
+    access                       = "value"
+    destination_address_prefixes = ["value"]
+    destination_port_ranges      = ["value"]
+    direction                    = "value"
+    network_security_group_name  = "value"
+    priority                     = "value"
+    protocol                     = "value"
+    source_address_prefix        = "value"
+    source_port_ranges           = ["value"]
+  }
+}
+
 tags = {
   "provisioner" = "terraform"
   "category"    = "network"

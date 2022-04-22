@@ -35,3 +35,18 @@ variable "firewall_subnet_address_prefix" {
   type = list(string)
 
 }
+
+variable "network_security_group_rules" {
+  type = map(object({
+    priority                     = string
+    direction                    = string
+    access                       = string
+    protocol                     = string
+    source_port_ranges           = list(string)
+    destination_port_ranges      = list(string)
+    source_address_prefix        = string
+    destination_address_prefixes = list(string)
+    network_security_group_name  = string
+  }))
+
+}
