@@ -20,6 +20,10 @@ resource "azurerm_network_watcher_flow_log" "nsg" {
     workspace_resource_id = azurerm_log_analytics_workspace.aks.id
     interval_in_minutes   = 10
   }
+
+  lifecycle {
+    ignore_changes = [location]
+  }
 }
 
 // VNET DIAGNOSTICS

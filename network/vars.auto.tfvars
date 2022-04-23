@@ -69,6 +69,54 @@ subnets = {
   }
 }
 
+// FIREWALL RULES
+firewall_application_rule_collection = {
+
+  "RCG-AKS-Application" = {
+
+    application_rule_collection = {
+      action                = "Allow"
+      destination_fqdns     = ["*.microsoft.com"]
+      destination_fqdn_tags = ["AzureKubernetesService"]
+      name                  = "RC-AKS-Application"
+      priority              = 500
+
+      rule = {
+        name = "AzureKubernetesService"
+        protocols = {
+          port = 443
+          type = "Https"
+        }
+      }
+
+      source_addresses = ["10.0.8.0/21", "10.0.2.0/23"]
+    }
+    priority = 500
+  }
+}
+
+firewall_network_rule_collection = {
+
+  "RCG-AKS-Network" = {
+
+    network_rule_collection = {
+      action   = "Allow"
+      name     = "RC-AKS-Network"
+      priority = 400
+
+      rule = {
+        destination_address = ["*"]
+        destination_ports   = ["1194", "9000"]
+        name                = "AzureKubernetesService"
+        protocols           = ["UDP"]
+        source_addresses    = ["10.0.8.0/21", "10.0.2.0/23"]
+      }
+    }
+    priority = 400
+  }
+}
+
+// NETWORK SECURITY GROUP RULES
 network_security_group_rules = {
 
   "AllowGatewayManager" = {
