@@ -2,13 +2,13 @@ resource_group_name = "rg-aks-network"
 location            = "centralus"
 
 //FIREWALL
-firewall_name              = "afw-aks-shared"
+firewall_name              = "afw-shared"
 firewall_sku_name          = "AZFW_VNet"
 firewall_sku_tier          = "Premium"
 firewall_threat_intel_mode = "Alert"
 firewall_zones             = ["1"]
-firewall_policy_name       = "afw-policy-main"
-firewall_public_ip_name    = "pip-aks-afw"
+firewall_policy_name       = "policy-afw-shared"
+firewall_public_ip_name    = "pip-afw-shared"
 
 // VIRTUAL NETWORKS
 firewall_subnet_address_prefix = ["192.168.0.0/25"]

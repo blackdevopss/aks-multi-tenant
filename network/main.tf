@@ -6,11 +6,18 @@ resource "azurerm_resource_group" "rg" {
   tags = var.tags
 }
 
+resource "azurerm_resource_group" "netw" {
+  name     = "NetworkWatcherRG"
+  location = var.location
+
+  tags = var.tags
+}
+
 // NETWORK WATCHER
 resource "azurerm_network_watcher" "netw" {
-  name                = "netw-watcher-prd"
+  name                = "netwatcher_${var.location}"
   location            = var.location
-  resource_group_name = azurerm_resource_group.rg.name
+  resource_group_name = azurerm_resource_group.netw.name
 }
 
 // STORAGE ACCOUNT FOR DIAGNOSTICS
