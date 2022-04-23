@@ -69,7 +69,7 @@ subnets = {
   }
 }
 
-// FIREWALL RULES
+// APPLICATION AZURE FIREWALL RULES
 firewall_application_rule_collection = {
 
   "RCG-AKS-Application" = {
@@ -95,6 +95,7 @@ firewall_application_rule_collection = {
   }
 }
 
+// NETWORK AZURE FIREWALL RULES
 firewall_network_rule_collection = {
 
   "RCG-AKS-Network" = {
@@ -105,11 +106,26 @@ firewall_network_rule_collection = {
       priority = 400
 
       rule = {
-        destination_address = ["*"]
-        destination_ports   = ["1194", "9000"]
-        name                = "AzureKubernetesService"
-        protocols           = ["UDP"]
-        source_addresses    = ["10.0.8.0/21", "10.0.2.0/23"]
+        destination_addresses = ["*"]
+        destination_ports     = ["1194", "9000"]
+        name                  = "AzureKubernetesService"
+        protocols             = ["UDP"]
+        source_addresses      = ["10.0.8.0/21", "10.0.2.0/23"]
+      }
+
+      rule = {
+        destination_addresses = ["*"]
+        destination_ports     = ["123"]
+        name                  = "NetworkTimeProtocol"
+        protocols             = ["UDP"]
+        source_addresses      = ["10.0.8.0/21", "10.0.2.0/23"]
+      }
+      rule = {
+        destination_addresses = ["*"]
+        destination_ports     = ["53"]
+        name                  = "DomainNameSystem"
+        protocols             = ["UDP"]
+        source_addresses      = ["10.0.8.0/21", "10.0.2.0/23"]
       }
     }
     priority = 400

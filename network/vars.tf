@@ -112,11 +112,11 @@ variable "firewall_network_rule_collection" {
       priority = number
       action   = string
       rule = object({
-        name                = string
-        protocols           = list(string)
-        source_addresses    = list(string)
-        destination_address = list(string)
-        destination_ports   = list(string)
+        name                  = string
+        protocols             = list(string)
+        source_addresses      = list(string)
+        destination_addresses = list(string)
+        destination_ports     = list(string)
       })
     })
   }))

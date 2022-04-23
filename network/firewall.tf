@@ -86,11 +86,11 @@ resource "azurerm_firewall_policy_rule_collection_group" "rcg" {
     priority = 400
     action   = each.value.network_rule_collection.action
     rule {
-      name                  = each.value.network_rule_collection.name
-      protocols             = each.value.network_rule_collection.protocols
-      source_addresses      = each.value.source_addresses
-      destination_addresses = each.value.destination_addresses
-      destination_ports     = each.value.destination_ports
+      name                  = each.value.network_rule_collection.rule.name
+      protocols             = each.value.network_rule_collection.rule.protocols
+      source_addresses      = each.value.network_rule_collection.rule.source_addresses
+      destination_addresses = each.value.network_rule_collection.rule.destination_addresses
+      destination_ports     = each.value.network_rule_collection.rule.destination_ports
     }
   }
 }
