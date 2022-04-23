@@ -1,6 +1,6 @@
 // GET THE FIREWALL PRIVATE IP ADDRESS
 data "azurerm_firewall" "afw" {
-  name                = "afw-aks-shared"
+  name                = "afw-shared"
   resource_group_name = "rg-aks-network"
 
   depends_on = [azurerm_firewall.afw]

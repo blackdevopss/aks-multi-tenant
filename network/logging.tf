@@ -1,7 +1,7 @@
 resource "azurerm_network_watcher_flow_log" "nsg" {
   for_each             = var.subnets
   network_watcher_name = azurerm_network_watcher.netw.name
-  resource_group_name  = azurerm_resource_group.rg.name
+  resource_group_name  = azurerm_resource_group.netw.name
   name                 = azurerm_network_security_group.nsg[each.key].name
 
   network_security_group_id = azurerm_network_security_group.nsg[each.key].id
